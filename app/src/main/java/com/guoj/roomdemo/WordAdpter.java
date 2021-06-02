@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,14 +29,32 @@ public class WordAdpter extends RecyclerView.Adapter<WordAdpter.WordViewHolder> 
     @Override
     public WordViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater=LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.item2_layout, parent, false);
-        return new WordViewHolder(view);
+        View itemView = inflater.inflate(R.layout.item2_layout, parent, false);
+        WordViewHolder wordViewHolder=new WordViewHolder(itemView);
+
+        itemView.setOnClickListener(view -> {
+            Word word = (Word) wordViewHolder.itemView.getTag(R.id.word_for_item);
+            Toast.makeText(parent.getContext(), "id:"+word.getId()+"="+word.getWord(),Toast.LENGTH_SHORT).show();
+        });
+        wordViewHolder.aSwitch.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            Word word = (Word) wordViewHolder.itemView.getTag(R.id.word_for_item);
+            if (isChecked){
+                wordViewHolder.tv_chinese.setVisibility(View.VISIBLE);
+                word.setShowMean(true);
+            }else {
+                wordViewHolder.tv_chinese.setVisibility(View.GONE);
+                word.setShowMean(false);
+            }
+            wordViewModel.updateWords(word);
+        });
+        return wordViewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull  WordAdpter.WordViewHolder holder, int position) {
         Word word = words.get(position);
-        holder.aSwitch.setOnCheckedChangeListener(null);//防止乱序
+        holder.itemView.setTag(R.id.word_for_item,word);
+//        holder.aSwitch.setOnCheckedChangeListener(null);//防止乱序
         holder.tv_num.setText(position+1+"");
         holder.tv_english.setText(word.getWord());
         holder.tv_chinese.setText(word.getChinese());
@@ -47,17 +66,6 @@ public class WordAdpter extends RecyclerView.Adapter<WordAdpter.WordViewHolder> 
             holder.tv_chinese.setVisibility(View.GONE);
             word.setShowMean(false);
         }
-
-        holder.aSwitch.setOnCheckedChangeListener((compoundButton, isChecked) -> {
-            if (isChecked){
-                holder.tv_chinese.setVisibility(View.VISIBLE);
-                word.setShowMean(true);
-            }else {
-                holder.tv_chinese.setVisibility(View.GONE);
-                word.setShowMean(false);
-            }
-            wordViewModel.updateWords(word);
-        });
     }
 
     @Override
