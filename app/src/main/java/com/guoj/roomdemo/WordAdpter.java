@@ -3,13 +3,13 @@ package com.guoj.roomdemo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +26,7 @@ public class WordAdpter extends RecyclerView.Adapter<WordAdpter.WordViewHolder> 
         this.words = words;
     }
 
+    @NonNull
     @Override
     public WordViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater=LayoutInflater.from(parent.getContext());
@@ -77,7 +78,7 @@ public class WordAdpter extends RecyclerView.Adapter<WordAdpter.WordViewHolder> 
         TextView tv_num;
         TextView tv_english;
         TextView tv_chinese;
-        Switch aSwitch;
+        SwitchMaterial aSwitch;
         public WordViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_num=itemView.findViewById(R.id.tv_num);
